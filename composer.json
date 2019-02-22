@@ -1,0 +1,17 @@
+{
+    "name": "jamesskinner12/schematics",
+    "description": "PHP library to easily create `schema` classes to map data structures",
+    "type": "library",
+    "authors": [
+        {
+            "name": "James Skinner",
+            "email": "jameswskinner12@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Schematics\\": "src/"
+        }
+    }
+}
