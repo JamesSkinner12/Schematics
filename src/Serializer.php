@@ -47,12 +47,33 @@ class Serializer
         return $out;
     }
 
+    public function isMultiItem($data)
+    {
+        $keys = array_keys($data);
+        $key = reset($keys);
+        return is_int($key);
+    }
+
+
+
     public function applyItem($name, $data = [])
     {
         $keys = explode("|", $this->schema->map()[$name]);
-        foreach ($keys as $key) {
-            $data = $data[$key];
+        if (!$this->isMultiItem($data)) {
+          foreach ($keys as $key) {
+              $data = $data[$key];
+          }
+        } else {
+            foreach ($data as $itm) {
+                foreach ($keys as $key) {
+                    $itm = $itm[$key];
+                }
+                $tmp[] = $itm;
+            }
+            return $tmp;
         }
         return $data;
     }
+
+
 }
