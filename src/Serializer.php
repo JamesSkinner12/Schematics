@@ -61,7 +61,9 @@ class Serializer
         $keys = explode("|", $this->schema->map()[$name]);
         if (!$this->isMultiItem($data)) {
           foreach ($keys as $key) {
-              $data = $data[$key];
+              if (!empty($data[$key])) {
+                  $data = $data[$key];
+              }
           }
         } else {
             foreach ($data as $itm) {
