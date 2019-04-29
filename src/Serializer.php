@@ -54,8 +54,6 @@ class Serializer
         return is_int($key);
     }
 
-
-
     public function applyItem($name, $data = [])
     {
         $keys = explode("|", $this->schema->map()[$name]);
@@ -63,6 +61,8 @@ class Serializer
           foreach ($keys as $key) {
               if (!empty($data[$key])) {
                   $data = $data[$key];
+              } else {
+                  return null;
               }
           }
         } else {
