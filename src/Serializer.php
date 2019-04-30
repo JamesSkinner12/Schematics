@@ -59,10 +59,15 @@ class Serializer
         $keys = explode("|", $this->schema->map()[$name]);
         if (!$this->isMultiItem($data)) {
           foreach ($keys as $key) {
-              if (!empty($data[$key])) {
-                  $data = $data[$key];
+              if ($this->hasCatchAll($key)) {
+		  echo $name;
+                  $data = $this->getItemsMatching($key, $data);
               } else {
-                  return null;
+                  if (!empty($data[$key])) {
+                      $data = $data[$key];
+                  } else {
+                      return null;
+                  }
               }
           }
         } else {
@@ -77,5 +82,32 @@ class Serializer
         return $data;
     }
 
+    public function hasCatchAll($name)
+    {
+        return stristr($name, "*");
+    }
 
+    public function catchAllPattern($name)
+    {
+        $re = "/";
+
+        $handle = array_filter(explode("*", $name), function($itm) {
+            return (!empty($itm));
+        });
+
+        while (!empty($handle)) {
+            $element = array_shift($handle);
+            $re .= "(" . $element . ").*";
+        }
+        return $re . "/m";
+    }
+
+    public function getItemsMatching($name, $data = [])
+    {
+        $pattern = $this->catchAllPattern($name);
+        foreach (preg_grep($this->catchAllPattern($name), array_keys($data)) as $key) {
+            $output[$key] = $data[$key];
+        }
+        return (!empty($output)) ? $output : [];
+    }
 }
