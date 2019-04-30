@@ -64,7 +64,6 @@ class Serializer
         if (!$this->isMultiItem($data)) {
           foreach ($keys as $key) {
               if ($this->hasCatchAll($key)) {
-          echo $name;
                   $data = $this->getItemsMatching($key, $data);
               } else {
                   if (!empty($data[$key])) {
@@ -94,11 +93,9 @@ class Serializer
     public function catchAllPattern($name)
     {
         $re = "/";
-
         $handle = array_filter(explode("*", $name), function($itm) {
             return (!empty($itm));
         });
-
         while (!empty($handle)) {
             $element = array_shift($handle);
             $re .= "(" . $element . ").*";
