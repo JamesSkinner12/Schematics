@@ -49,9 +49,13 @@ class Serializer
 
     public function isMultiItem($data)
     {
-        $keys = array_keys($data);
-        $key = reset($keys);
-        return is_int($key);
+        try {
+            $keys = array_keys($data);
+            $key = reset($keys);
+            return is_int($key);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function applyItem($name, $data = [])
@@ -60,13 +64,13 @@ class Serializer
         if (!$this->isMultiItem($data)) {
           foreach ($keys as $key) {
               if ($this->hasCatchAll($key)) {
-		  echo $name;
+          echo $name;
                   $data = $this->getItemsMatching($key, $data);
               } else {
                   if (!empty($data[$key])) {
                       $data = $data[$key];
                   } else {
-                      return null;
+                      return [];
                   }
               }
           }
