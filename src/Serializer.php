@@ -34,6 +34,9 @@ class Serializer
     {
         $schema = $this->schema->getSchema($name);
         $out = [];
+        if (empty($values)) {
+            return $out;
+        }
         $keys = array_keys($values);
         $tmpKey = reset($keys);
         if (is_int($tmpKey)) {
@@ -49,13 +52,12 @@ class Serializer
 
     public function isMultiItem($data)
     {
-        try {
+        if (!empty($data)) {
             $keys = array_keys($data);
             $key = reset($keys);
             return is_int($key);
-        } catch (\Exception $e) {
-            return false;
         }
+        return false;
     }
 
     public function applyItem($name, $data = [])
@@ -69,7 +71,7 @@ class Serializer
                   if (!empty($data[$key])) {
                       $data = $data[$key];
                   } else {
-                      return [];
+                      return;
                   }
               }
           }
