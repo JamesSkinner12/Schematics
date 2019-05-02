@@ -62,7 +62,7 @@ class Serializer
 
     public function applyItem($name, $data = [])
     {
-        $keys = explode("|", $this->schema->map()[$name]);
+        $keys = explode("|", $this->schema->readMap()[$name]);
         if (!$this->isMultiItem($data)) {
           foreach ($keys as $key) {
               if ($this->hasCatchAll($key)) {

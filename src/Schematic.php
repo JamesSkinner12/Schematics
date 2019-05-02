@@ -4,6 +4,13 @@ namespace Schematics;
 
 abstract class Schematic
 {
+    protected $overrides = [];
+
+    public function __construct($overrides = [])
+    {
+        $this->overrides = $overrides;
+    }
+
     abstract public function map();
 
     public function schemas()
@@ -13,10 +20,15 @@ abstract class Schematic
         ];
     }
 
-    protected static function bind()
+    public function readMap()
+    {
+        return array_merge($this->map(), $this->overrides);
+    }
+
+    protected static function bind($override = [])
     {
         $class = get_called_class();
-        return new $class();
+        return new $class($override);
     }
 
     public function getSchema($name)
@@ -76,9 +88,9 @@ abstract class Schematic
      * @param array $data
      * @return array
      */
-    public static function serialize($data = [])
+    public static function serialize($data = [], $overrides = [])
     {
-        return self::bind()->serializer()->serialize($data);
+        return self::bind($overrides)->serializer()->serialize($data);
     }
 
     /**
